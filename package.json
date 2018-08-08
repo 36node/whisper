@@ -54,7 +54,7 @@
     "@36node/eslint-config": "0.0.2",
     "@commitlint/cli": "6.1.0",
     "@commitlint/config-conventional": "6.1.0",
-    "husky": "0.14.3",
+    "husky": "1.0.0-rc.13",
     "jest": "23.4.2",
     "lint-staged": "7.2.0",
     "nodemon": "1.18.3",
