@@ -44,9 +44,6 @@
     "*.js": [
       "npm run format",
       "git add"
-    ],
-    "yarn.lock": [
-      "git rm --cached"
     ]
   },
   "devDependencies": {
