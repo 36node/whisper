@@ -1,5 +1,9 @@
 import shortid from "shortid";
 
+/**
+ * Session class.
+ */
+
 export default class Session {
   id;
   app;

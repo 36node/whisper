@@ -143,7 +143,6 @@ export default class Application extends Emitter {
   onerror(err) {
     if (!(err instanceof Error)) throw new TypeError(util.format("non-error thrown: %j", err));
 
-    if (404 == err.status || err.expose) return;
     if (this.silent) return;
 
     const msg = err.stack || err.toString();

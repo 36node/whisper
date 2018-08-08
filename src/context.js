@@ -1,6 +1,12 @@
+import util from "util";
+
 import delegate from "delegates";
 
 import Session from "./session";
+
+/**
+ * Context class.
+ */
 
 export default class Context {
   app;
@@ -31,8 +37,7 @@ export default class Context {
     // don't do anything if there is no error.
     // this allows you to pass `this.onerror`
     // to node-style callbacks.
-    if (null == err) return;
-
+    if (null === err) return;
     if (!(err instanceof Error)) err = new Error(util.format("non-error thrown: %j", err));
 
     // delegate

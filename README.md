@@ -23,11 +23,25 @@ import Whisper from "whisper";
 
 const app = new Whisper();
 
-app.listen(3456, () => console.log("started!"));
+app.listen(3456);
+
+app.use(async (ctx, next) => {
+  const buf = ctx.data;
+
+  // handle request
+  ctx.start = buf.toString("utf8", 0, 2);
+
+  await next();
+
+  // send data back to client
+  // body could be string or buf
+  // body also can be a stream, like file stream
+  ctx.body = "haha";
+});
 
 app.use(async (ctx, next) => {
   await next();
-  ctx.body = "haha";
+  console.log(ctx.start);
 });
 ```
 
