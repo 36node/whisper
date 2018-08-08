@@ -45,6 +45,10 @@ app.use(async (ctx, next) => {
 });
 ```
 
+逻辑在 中间件中写，通过 app.use 调用，整体采用和 KOA 一样的洋葱模型。
+
+TODO: 补更多的 readme
+
 ## API
 
 ### ctx.body
@@ -136,7 +140,8 @@ Returns: <net.Socket> The socket itself.
 Sets the socket to timeout after timeout milliseconds of inactivity on the socket.
 By default net.Socket do not have a timeout.
 
-When an idle timeout is triggered the socket will receive a 'timeout' event but the connection will not be severed.
+When an idle timeout is triggered the socket will receive a 'timeout'
+event but the connection will not be severed.
 The user must manually call socket.end() or socket.destroy() to end the connection.
 
 ```js
@@ -189,4 +194,4 @@ See Writable stream write() method for more information.
 
 Authored and maintained by 36node with help from contributors ([list](https://github.com/36node/whisper/contributors)).
 
-> [github.com/zzswang](https://github.com/zzswang) · GitHub [@36node](https://github.com/36node) · Twitter [@y](https://twitter.com/y)
+> [github.com/zzswang](https://github.com/zzswang) · GitHub [@36node](https://github.com/36node)
