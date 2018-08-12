@@ -1,4 +1,4 @@
-import Whisper from '../src';
+import Whisper from "../src";
 
 const app = new Whisper();
 
@@ -20,7 +20,7 @@ const logMiddleware = async (ctx, next) => {
 
 const dataMiddleware = async (ctx, next) => {
   // step 2: handle request
-  ctx.req = ctx.data.toString('utf8', 0, 2);
+  ctx.req = ctx.data.toString("utf8", 0, 2);
 
   await next();
 
@@ -32,19 +32,19 @@ const dataMiddleware = async (ctx, next) => {
 app.use(logMiddleware);
 app.use(dataMiddleware);
 
-app.on('close', session => {
+app.on("close", session => {
   console.log(`session ${session.id}: closed`);
 });
 
-app.on('timeout', session => {
+app.on("timeout", session => {
   console.log(`session ${session.id}: timeout`);
 });
 
-app.on('end', session => {
+app.on("end", session => {
   console.log(`session ${session.id}: end`);
 });
 
-app.on('error', session => {
+app.on("error", session => {
   console.log(`session ${session.id}: error`);
 });
 

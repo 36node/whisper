@@ -1,4 +1,4 @@
-import delegate from 'delegates';
+import delegate from "delegates";
 
 /**
  * Context class.
@@ -10,8 +10,8 @@ export default class Context {
   session;
 }
 
-delegate(Context.prototype, 'session')
-  .access('app')
-  .access('socket')
-  .method('send')
-  .method('onerror');
+delegate(Context.prototype, "session")
+  .access("app")
+  .access("socket")
+  .method("send")
+  .method("onerror");
