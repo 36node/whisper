@@ -1,16 +1,15 @@
-import Emitter from "events";
-import net from "net";
-import util from "util";
-import Stream from "stream";
+import Emitter from 'events';
+import net from 'net';
+import util from 'util';
 
-import compose from "koa-compose";
-import Debugger from "debug";
-import only from "only";
+import compose from 'koa-compose';
+import Debugger from 'debug';
+import only from 'only';
 
-import Session from "./session";
-import Context from "./context";
+import Session from './session';
+import Context from './context';
 
-const debug = new Debugger("whisper");
+const debug = new Debugger('whisper');
 
 /**
  * Expose `Application` class.
@@ -28,7 +27,8 @@ export default class Application extends Emitter {
     super();
 
     this.middleware = [];
-    this.env = process.env.NODE_ENV || "development";
+    this.sessions = [];
+    this.env = process.env.NODE_ENV || 'development';
 
     if (util.inspect.custom) {
       this[util.inspect.custom] = this.inspect;
@@ -46,7 +46,7 @@ export default class Application extends Emitter {
    */
 
   listen(...args) {
-    debug("listen");
+    debug('listen');
     const server = net.createServer(this.callback());
     return server.listen(...args);
   }
@@ -60,7 +60,7 @@ export default class Application extends Emitter {
    */
 
   toJSON() {
-    return only(this, ["env"]);
+    return only(this, ['env']);
   }
 
   /**
@@ -85,8 +85,8 @@ export default class Application extends Emitter {
    */
 
   use(fn) {
-    if (typeof fn !== "function") throw new TypeError("middleware must be a function!");
-    debug("use %s", fn._name || fn.name || "-");
+    if (typeof fn !== 'function') throw new TypeError('middleware must be a function!');
+    debug('use %s', fn._name || fn.name || '-');
     this.middleware.push(fn);
     return this;
   }
@@ -102,35 +102,58 @@ export default class Application extends Emitter {
   callback() {
     const fn = compose(this.middleware);
 
-    if (!this.listenerCount("error")) this.on("error", this.onerror);
+    if (!this.listenerCount('error')) this.on('error', this.onerror);
 
     const handleConnect = socket => {
       // create session while new connection
-      const session = new Session(this, socket);
-      socket.on("data", data => {
-        const ctx = new Context(session, data);
+      const session = this.createSession(socket);
+
+      // hanlders
+      const handleEnd = () => session.end();
+      const handleClose = () => session.close();
+      const handleError = err => session.onerror(err);
+      const handleTimeout = () => session.timeout();
+      const handleData = data => {
+        const ctx = this.createContext(session, data);
         this.handleRequest(ctx, fn);
-      });
+      };
+
+      socket.on('close', handleClose);
+      socket.on('data', handleData);
+      socket.on('end', handleEnd);
+      socket.on('error', handleError);
+      socket.on('timeout', handleTimeout);
     };
 
     return handleConnect;
   }
 
   /**
+   * broad cast data to all client or clients match filter
+   * filt is a function
+   * filt = session => { return true; }
+   *
+   * @param {*} data string/buffer/json
+   */
+  broadcast(data, filt = () => true) {
+    debug('broadcast');
+    this.sessions.filter(filt).forEach(session => session.send(data));
+  }
+
+  /**
    * Handle request in callback.
    *
+   * @param {Context} ctx
+   * @param {Function} fnMiddleware
    * @api private
    */
 
   handleRequest(ctx, fnMiddleware) {
-    debug("data comming with seq %s", ctx.seq);
+    debug('data comming with seq no %s', ctx.no);
     debug(ctx.data);
 
     const onerror = err => ctx.onerror(err);
-    const handleResponse = () => respond(ctx);
-    return fnMiddleware(ctx)
-      .then(handleResponse)
-      .catch(onerror);
+    return fnMiddleware(ctx).catch(onerror);
   }
 
   /**
@@ -141,44 +164,70 @@ export default class Application extends Emitter {
    */
 
   onerror(err) {
-    if (!(err instanceof Error)) throw new TypeError(util.format("non-error thrown: %j", err));
+    if (!(err instanceof Error)) throw new TypeError(util.format('non-error thrown: %j', err));
 
     if (this.silent) return;
 
     const msg = err.stack || err.toString();
     console.error();
-    console.error(msg.replace(/^/gm, "  "));
+    console.error(msg.replace(/^/gm, '  '));
     console.error();
   }
-}
 
-/**
- * Response helper.
- */
-
-function respond(ctx) {
-  const { socket, dumb, body } = ctx;
-
-  // allow bypassing whisper
-  if (dumb) return;
-
-  // socket close
-  if (!socket.writable) return;
-
-  // no body
-  if (!body) {
-    return debug("no body");
+  /**
+   * add session to list
+   *
+   * @param {*} session
+   * @api private
+   */
+  add(session) {
+    const index = this.sessions.indexOf(session);
+    if (index === -1) this.sessions.push(session);
+    return session;
   }
 
-  debug("respond body");
-  debug(body);
+  /**
+   * remove session from list
+   *
+   * @param {*} session
+   * @api private
+   */
+  remove(session) {
+    const index = this.sessions.indexOf(session);
+    if (index !== -1) this.sessions.splice(index, 1);
+    return session;
+  }
 
-  // responses
-  if (Buffer.isBuffer(body)) return socket.write(body);
-  if ("string" === typeof body) return socket.write(body);
-  if (body instanceof Stream) return body.pipe(socket);
+  /**
+   * Initialize a new session.
+   * @param {Socket} socket
+   *
+   * @api private
+   */
 
-  // body: json
-  const str = JSON.stringify(body);
-  socket.write(str);
+  createSession(socket) {
+    const session = new Session();
+    session.app = this;
+    session.socket = socket;
+
+    return this.add(session);
+  }
+
+  /**
+   * Initialize a new context.
+   * @param {Socket} socket
+   * @param {Session} session
+   * @param {*} data
+   *
+   * @api private
+   */
+
+  createContext(session, data) {
+    const ctx = new Context();
+    ctx.data = data;
+    ctx.session = session;
+    ctx.no = session.genSeq();
+
+    return ctx;
+  }
 }

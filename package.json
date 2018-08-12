@@ -23,7 +23,7 @@
     "prepublishOnly": "npm run build",
     "release": "standard-version && git push --follow-tags origin master",
     "test:cov": "jest --coverage && npm run lint",
-    "test": "npm run lint && jest"
+    "test": "npm run lint && jest --silent"
   },
   "commitlint": {
     "extends": [
