@@ -51,134 +51,104 @@ TODO: 补更多的 readme
 
 ## API
 
-### ctx.body
+### Application 即 `Whisper`
 
-回复给 client 的数据
+#### Whisper()
 
-### ctx.data
+构造函数，创建 Application
 
-收到 client 发送的数据
+#### Whisper.listen(port)
 
-### ctx.bufferSize
+启动 server，监听端口
 
-`socket.bufferSize`
+#### Whisper.toJSON()
 
-### ctx.bytesRead
+return json data
 
-`socket.bytesRead`
+#### Whisper.use(fn)
 
-The amount of received bytes.
+使用中间件
 
-### ctx.bytesWritten
-
-`socket.bytesWritten`
-
-The amount of bytes sent.
-
-### ctx.localAddress
-
-`socket.localAddress`
-
-The string representation of the local IP address the remote client is connecting on.
-For example, in a server listening on '0.0.0.0', if a client connects on '192.168.1.1',
-the value of socket.localAddress would be '192.168.1.1'.
-
-### ctx.localPort
-
-`socket.localPort`
-
-The numeric representation of the local port. For example, 80 or 21.
-
-### ctx.remoteAddress
-
-`socket.remoteAddress`
-
-The string representation of the remote IP address. For example, '74.125.127.100' or '2001:4860:a005::68'.
-Value may be undefined if the socket is destroyed (for example, if the client disconnected).
-
-### ctx.remoteFamily
-
-`socket.remoteFamily`
-
-The string representation of the remote IP family. 'IPv4' or 'IPv6'.
-
-### ctx.remotePort
-
-`socket.remotePort`
-
-The numeric representation of the remote port. For example, 80 or 21.
-
-### ctx.address()
-
-- Returns: `<Object>`
-- Returns the bound address, the address family name and port of the socket
-  as reported by the operating system:
-  `{ port: 12346, family: 'IPv4', address: '127.0.0.1' }`
-
-### ctx.pause()
-
-`socket.pause()`
-
-Returns: <net.Socket> The socket itself.
-
-Pauses the reading of data. That is, 'data' events will not be emitted. Useful to throttle back an upload.
-
-### ctx.resume()
-
-`socket.resume()`
-
-Returns: <net.Socket> The socket itself.
-
-Resumes reading after a call to socket.pause().
-
-### ctx.setTimeout(timeout[, callback])
-
-`socket.setTimeout(timeout[, callback])`
-
-Returns: <net.Socket> The socket itself.
-
-Sets the socket to timeout after timeout milliseconds of inactivity on the socket.
-By default net.Socket do not have a timeout.
-
-When an idle timeout is triggered the socket will receive a 'timeout'
-event but the connection will not be severed.
-The user must manually call socket.end() or socket.destroy() to end the connection.
+其中 fn 即中间件
 
 ```js
-socket.setTimeout(3000);
-socket.on("timeout", () => {
-  console.log("socket timeout");
-  socket.end();
-});
+fn = (ctx, next) => { ... }
 ```
 
-If timeout is 0, then the existing idle timeout is disabled.
+#### Whisper.broadcast(data, filt)
 
-The optional callback parameter will be added as a one-time listener for the 'timeout' event.
+群发消息
 
-### ctx.write(data[, encoding][, callback])
+- data: string/buffer/json
+- filt: function 过滤符合条件的 sessions
 
-`socket.write(data[, encoding][, callback])`
+filt:
 
 ```js
-data <string> | <Buffer> | <Uint8Array>
-encoding <string> Only used when data is string. Default: utf8.
-callback <Function>
-Returns: <boolean>
+fn = session => {
+  return true;
+};
 ```
 
-Sends data on the socket. The second parameter specifies the encoding in the case of a string
+### Context
 
-it defaults to UTF8 encoding.
+#### ctx.data
 
-Returns true if the entire data was flushed successfully to the kernel buffer.
-Returns false if all or part of the data was queued in user memory.
-'drain' will be emitted when the buffer is again free.
+origin data from socket buffer
 
-The optional callback parameter will be executed when the data is finally written out -
-this may not be immediately.
+#### ctx.no
 
-See Writable stream write() method for more information.
+当前通讯 在会话中的位置序号
+
+#### ctx.socket
+
+`net.Socket`
+
+[参见 nodejs 文档](https://nodejs.org/api/net.html#net_class_net_socket)
+
+#### ctx.session
+
+`Session`
+
+同一个 socket 的连续数据传输组成一个会话
+
+#### ctx.app
+
+`Application`
+
+### Session
+
+#### Session.send(data)
+
+发送数据到客户端
+
+- data: string, buffer or json
+
+如果 socket.writable === false, 那么数据将不会发送
+
+#### Session.id
+
+session 的唯一编号
+
+#### Session.createdAt
+
+session 创建的时间
+
+#### Session.closedAt
+
+session 关闭的时间
+
+#### Session.app
+
+`Application`
+
+同 ctx.app
+
+#### Session.socket
+
+`net.Socket`
+
+同 ctx.socket
 
 ## Contributing
 
