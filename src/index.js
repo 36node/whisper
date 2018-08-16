@@ -135,6 +135,7 @@ export default class Application extends Emitter {
    *
    * @param {*} data string/buffer/json
    */
+
   broadcast(data, filt = () => true) {
     debug("broadcast");
     this.sessions.filter(filt).forEach(session => session.send(data));
@@ -180,6 +181,7 @@ export default class Application extends Emitter {
    * @param {*} session
    * @api private
    */
+
   add(session) {
     const index = this.sessions.indexOf(session);
     if (index === -1) this.sessions.push(session);
@@ -192,6 +194,7 @@ export default class Application extends Emitter {
    * @param {*} session
    * @api private
    */
+
   remove(session) {
     const index = this.sessions.indexOf(session);
     if (index !== -1) this.sessions.splice(index, 1);

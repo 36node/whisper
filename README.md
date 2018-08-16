@@ -118,13 +118,17 @@ origin data from socket buffer
 
 ### Session
 
-#### Session.send(data)
+#### method Session.send(data)
 
 发送数据到客户端
 
 - data: string, buffer or json
 
 如果 socket.writable === false, 那么数据将不会发送
+
+#### method Session.close()
+
+关闭会话
 
 #### Session.id
 

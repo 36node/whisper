@@ -26,9 +26,10 @@ export default class Session {
   /**
    * send data to client
    *
-   * @param {*} ctx
+   * @param {*} body body could be string/buffer/stream/json
    * @api public
    */
+
   send(body) {
     const socket = this.socket;
 
@@ -61,8 +62,25 @@ export default class Session {
    *
    * @api private
    */
+
   genSeq() {
     return this._lastSeq++;
+  }
+
+  /**
+   * close session
+   * destroy any socket
+   *
+   * @api public
+   */
+
+  close() {
+    debug("session close");
+    this.socket.destroy();
+
+    // delegate
+    this.app.remove(this);
+    this.app.emit("close", this);
   }
 
   /**
@@ -70,6 +88,7 @@ export default class Session {
    *
    * @api private
    */
+
   timeout() {
     debug("session timeout");
 
@@ -83,25 +102,14 @@ export default class Session {
    *
    * @api private
    */
+
   end() {
     debug("session end");
+    this.socket.end(); // not sure if need to call end() explicitly.
 
     // delegate
     this.app.remove(this);
     this.app.emit("end", this);
-  }
-
-  /**
-   * close session
-   *
-   * @api private
-   */
-  close() {
-    debug("session close");
-
-    // delegate
-    this.app.remove(this);
-    this.app.emit("close", this);
   }
 
   /**
