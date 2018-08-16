@@ -153,7 +153,7 @@ export default class Application extends Emitter {
     debug("data comming with seq no %s", ctx.no);
     debug(ctx.data);
 
-    const onerror = err => ctx.onerror(err);
+    const onerror = err => ctx.session.onerror(err);
     return fnMiddleware(ctx).catch(onerror);
   }
 

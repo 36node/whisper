@@ -19,5 +19,4 @@ export default class Context {
 delegate(Context.prototype, "session")
   .access("app")
   .access("socket")
-  .method("send")
-  .method("onerror");
+  .method("send");
