@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.1.3"></a>
+## [0.1.3](https://github.com/36node/whisper/compare/v0.1.2...v0.1.3) (2018-10-07)
+
+
+### Bug Fixes
+
+* respond in the end anyway ([6cd0173](https://github.com/36node/whisper/commit/6cd0173))
+
+
+
 <a name="0.1.2"></a>
 ## [0.1.2](https://github.com/36node/whisper/compare/v0.1.1...v0.1.2) (2018-10-06)
 
