@@ -154,7 +154,10 @@ export default class Application extends Emitter {
     debug(ctx.data);
 
     const onerror = err => ctx.session.onerror(err);
-    return fnMiddleware(ctx).catch(onerror);
+    const handleResponse = () => ctx.send(ctx.res);
+    return fnMiddleware(ctx)
+      .then(handleResponse)
+      .catch(onerror);
   }
 
   /**
