@@ -5,6 +5,7 @@ import util from "util";
 import compose from "koa-compose";
 import Debugger from "debug";
 import only from "only";
+import serializeError from "serialize-error";
 
 import Session from "./session";
 import Context from "./context";
@@ -172,10 +173,7 @@ export default class Application extends Emitter {
 
     if (this.silent) return;
 
-    const msg = err.stack || err.toString();
-    console.error();
-    console.error(msg.replace(/^/gm, "  "));
-    console.error();
+    console.error(serializeError(err));
   }
 
   /**
