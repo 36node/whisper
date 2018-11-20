@@ -13,6 +13,7 @@ export default class Context {
 
   constructor() {
     this.id = shortid.generate();
+    this.state = {}; // for additional data store
   }
 }
 

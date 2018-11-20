@@ -21,6 +21,7 @@ export default class Session {
     this.createdAt = new Date();
     this.id = shortid.generate();
     this._lastSeq = 0;
+    this.state = {}; // for additional data store
   }
 
   /**
