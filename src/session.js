@@ -130,6 +130,7 @@ export default class Session {
     if (!(err instanceof Error)) err = new Error(util.format("non-error thrown: %j", err));
 
     // delegate
+    err.session = this.id;
     this.app.emit("error", err, this);
   }
 }
