@@ -1,6 +1,6 @@
 {
   "name": "@36node/whisper",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "A module for tcp framework, like kao for web.",
   "repository": {
     "url": "36node/whisper",
