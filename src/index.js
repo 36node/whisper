@@ -171,9 +171,9 @@ export default class Application extends Emitter {
   onerror(err) {
     if (!(err instanceof Error)) throw new TypeError(util.format("non-error thrown: %j", err));
 
-    if (this.silent) return;
+    if (this.silent || err.code === "ECONNRESET") return; // ignore ECONNRESET error
 
-    // console.error(serializeError(err));
+    console.error(serializeError(err));
   }
 
   /**
