@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.1.8"></a>
+## [0.1.8](https://github.com/36node/whisper/compare/v0.1.7...v0.1.8) (2018-11-30)
+
+
+### Bug Fixes
+
+* tmp remove error ([091e69f](https://github.com/36node/whisper/commit/091e69f))
+
+
+
 <a name="0.1.7"></a>
 ## [0.1.7](https://github.com/36node/whisper/compare/v0.1.6...v0.1.7) (2018-11-23)
 
