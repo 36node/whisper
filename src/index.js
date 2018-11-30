@@ -173,7 +173,7 @@ export default class Application extends Emitter {
 
     if (this.silent) return;
 
-    console.error(serializeError(err));
+    // console.error(serializeError(err));
   }
 
   /**
