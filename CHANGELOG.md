@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.1.9"></a>
+## [0.1.9](https://github.com/36node/whisper/compare/v0.1.8...v0.1.9) (2019-02-23)
+
+
+### Bug Fixes
+
+* make context and session id longer ([67adf25](https://github.com/36node/whisper/commit/67adf25))
+
+
+
 <a name="0.1.8"></a>
 ## [0.1.8](https://github.com/36node/whisper/compare/v0.1.7...v0.1.8) (2018-11-30)
 
