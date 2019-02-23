@@ -2,13 +2,7 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [0.1.10](https://github.com/36node/whisper/compare/v0.1.9...v0.1.10) (2019-02-23)
-
-
-### Bug Fixes
-
-* dependency vulnerability ([f1c4fe1](https://github.com/36node/whisper/commit/f1c4fe1))
-* jest conflict with babel version ([181aee8](https://github.com/36node/whisper/commit/181aee8))
+## [0.1.11](https://github.com/36node/whisper/compare/v0.1.10...v0.1.11) (2019-02-23)
 
 
 
