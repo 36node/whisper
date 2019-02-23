@@ -2,7 +2,7 @@ import Stream from "stream";
 import util from "util";
 
 import Debugger from "debug";
-import shortid from "shortid";
+import nanoid from "nanoid";
 
 const debug = new Debugger("whisper");
 
@@ -19,7 +19,7 @@ export default class Session {
 
   constructor() {
     this.createdAt = new Date();
-    this.id = shortid.generate();
+    this.id = nanoid();
     this._lastSeq = 0;
     this.state = {}; // for additional data store
   }

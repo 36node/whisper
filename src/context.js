@@ -1,5 +1,5 @@
 import delegate from "delegates";
-import shortid from "shortid";
+import nanoid from "nanoid";
 
 /**
  * Context class.
@@ -12,7 +12,7 @@ export default class Context {
   session;
 
   constructor() {
-    this.id = shortid.generate();
+    this.id = nanoid();
     this.state = {}; // for additional data store
   }
 }
