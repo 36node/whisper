@@ -57,7 +57,7 @@
     "microbundle": "^0.10.1",
     "nodemon": "^1.18.3",
     "prettier": "^1.13.7",
-    "standard-version": "^5.0.0"
+    "standard-version": "^8.0.1"
   },
   "dependencies": {
     "debug": "^4.1.1",
