@@ -63,7 +63,7 @@
     "debug": "^4.1.1",
     "delegates": "^1.0.0",
     "koa-compose": "^4.1.0",
-    "nanoid": "^2.0.1",
+    "nanoid": "^3.1.31",
     "only": "^0.0.2",
     "serialize-error": "^3.0.0"
   }
